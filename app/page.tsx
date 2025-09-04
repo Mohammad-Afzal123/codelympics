@@ -1,103 +1,177 @@
-import Image from "next/image";
+"use client";
+
+import { motion } from "framer-motion";
+import Particles from "react-tsparticles";
+import { loadSlim } from "tsparticles-slim";
+import { Rocket, Star, Users, Globe } from "lucide-react";
+import { useCallback } from "react";
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const particlesInit = useCallback(async (engine: any) => {
+    await loadSlim(engine);
+  }, []);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+  const hackathons = [
+    {
+      title: "CodeStorm",
+      rules: ["3 hrs coding sprint", "Teams of 2–4", "AI/ML challenges"],
+    },
+    {
+      title: "CyberQuest",
+      rules: ["Capture the Flag", "Solve vulnerabilities", "Win rewards"],
+    },
+    {
+      title: "DataVoyagers",
+      rules: ["Clean dataset", "Visualize trends", "Best insights win"],
+    },
+  ];
+
+  const timeline = [
+    { time: "Day 1 - 10:00 AM", event: "Opening Ceremony" },
+    { time: "Day 1 - 12:00 PM", event: "Hackathon Kickoff" },
+    { time: "Day 1 - 6:00 PM", event: "Mentor Sessions" },
+    { time: "Day 2 - 11:00 AM", event: "Midway Checkpoint" },
+    { time: "Day 2 - 4:00 PM", event: "Final Submissions" },
+    { time: "Day 2 - 6:00 PM", event: "Closing Ceremony" },
+  ];
+
+  return (
+    <div className="relative min-h-screen w-full overflow-x-hidden bg-black text-white font-sans">
+      {/* Space Background */}
+      <Particles
+        id="tsparticles"
+        init={particlesInit}
+        options={{
+          background: { color: "#000" },
+          particles: {
+            number: { value: 200, density: { enable: true, area: 1200 } },
+            color: { value: ["#ffffff", "#FFD700", "#00BFFF"] },
+            size: { value: { min: 1, max: 3 } },
+            move: { enable: true, speed: 0.6 },
+            twinkle: { particles: { enable: true, color: "#fff", frequency: 0.2 } },
+            links: { enable: true, distance: 120, color: "#ffffff33", opacity: 0.3 },
+          },
+        }}
+        className="absolute inset-0 -z-10"
+      />
+
+      {/* Hero Section */}
+      <section className="flex flex-col items-center justify-center h-screen text-center px-6">
+        <motion.h1
+          initial={{ opacity: 0, y: -30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+          className="text-5xl sm:text-6xl md:text-7xl font-bold mb-12"
+        >
+          Welcome to <span className="text-purple-400">CodeLympics</span>
+        </motion.h1>
+
+        {/* Olympic Circles */}
+        <div className="relative flex flex-wrap justify-center gap-4 sm:gap-6 max-w-lg">
+          {[
+            { color: "#1E90FF", style: "translate-x-0 translate-y-0" },
+            { color: "#000000", style: "translate-x-12 -translate-y-6" }, // black
+            { color: "#FF4500", style: "translate-x-24 translate-y-0" },
+            { color: "#FFD700", style: "translate-x-6 translate-y-10" },
+            { color: "#32CD32", style: "translate-x-18 translate-y-10" },
+          ].map((ring, idx) => (
+            <motion.div
+              key={idx}
+              whileHover={{ scale: 1.2, rotate: 8 }}
+              className={`absolute w-20 h-20 sm:w-28 sm:h-28 rounded-full border-4 ${ring.style}`}
+              style={{ borderColor: ring.color }}
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          ))}
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+
+        {/* Call to Action */}
+        <motion.a
+          href="#"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          className="mt-32 inline-flex items-center gap-3 px-8 py-4 bg-purple-600 hover:bg-purple-700 text-lg rounded-full shadow-lg shadow-purple-500/50 transition"
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          <Rocket /> Enter the Universe
+        </motion.a>
+      </section>
+
+      {/* Hackathon Section */}
+      <section className="relative px-6 py-20 bg-gradient-to-b from-black to-purple-900">
+        <h2 className="text-3xl sm:text-4xl font-bold text-center mb-12">
+          Upcoming Hackathons
+        </h2>
+
+        <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3 max-w-6xl mx-auto">
+          {hackathons.map((hack, i) => (
+            <motion.div
+              key={i}
+              whileHover={{ scale: 1.05 }}
+              className="bg-black/60 border border-purple-500/50 p-6 rounded-2xl shadow-lg flex flex-col justify-between"
+            >
+              <h3 className="text-xl font-semibold mb-4 text-purple-300">
+                {hack.title}
+              </h3>
+              <ul className="text-sm space-y-2">
+                {hack.rules.map((rule, idx) => (
+                  <li key={idx}>• {rule}</li>
+                ))}
+              </ul>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* How we conduct */}
+      <section className="px-6 py-20 bg-gradient-to-b from-purple-900 to-black text-center">
+        <h2 className="text-3xl sm:text-4xl font-bold mb-12">
+          How We Conduct Our Hackathons
+        </h2>
+
+        <div className="grid gap-8 sm:grid-cols-3 max-w-6xl mx-auto">
+          {[
+            { icon: <Star size={32} />, title: "Innovative Themes", text: "Unique challenges every time" },
+            { icon: <Users size={32} />, title: "Collaboration", text: "Team-based problem solving" },
+            { icon: <Globe size={32} />, title: "Global Access", text: "Join from anywhere in the world" },
+          ].map((item, idx) => (
+            <motion.div
+              key={idx}
+              whileHover={{ scale: 1.05 }}
+              className="p-6 bg-black/60 rounded-2xl border border-purple-500/40 shadow-lg"
+            >
+              <div className="mb-4 flex justify-center text-purple-300">{item.icon}</div>
+              <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
+              <p className="text-sm text-gray-300">{item.text}</p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* Timeline */}
+      <section className="px-6 py-20 bg-gradient-to-b from-black to-purple-950">
+        <h2 className="text-3xl sm:text-4xl font-bold text-center mb-12">
+          Event Timeline
+        </h2>
+        <div className="relative max-w-4xl mx-auto">
+          <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-purple-500/50"></div>
+          <div className="flex flex-col gap-12">
+            {timeline.map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, x: i % 2 === 0 ? -100 : 100 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className={`relative w-full sm:w-1/2 p-6 bg-black/70 border border-purple-500/40 rounded-xl shadow-md ${
+                  i % 2 === 0 ? "self-start" : "self-end"
+                }`}
+              >
+                <h4 className="font-semibold text-purple-300">{item.time}</h4>
+                <p className="text-sm text-gray-300">{item.event}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
