@@ -4,18 +4,17 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import { motion } from "framer-motion";
 import { Rocket, Star, User, Calendar, Settings } from "lucide-react";
 import Particles from "react-tsparticles";
-import type { Engine } from "tsparticles-engine";
-import { loadFull } from "tsparticles";
 import { useCallback } from "react";
+import { loadFull } from "tsparticles";
+import type { Engine } from "tsparticles-engine";
 
 export default function Dashboard() {
   const { data: session, status } = useSession();
 
   // ✅ Initialize particles properly
   const particlesInit = useCallback(async (engine: Engine) => {
-    await loadFull(engine);
+    await loadFull(engine as any);
   }, []);
-
   // ✅ Handle loading state
   if (status === "loading") {
     return <p className="text-white text-center mt-20">Loading...</p>;
