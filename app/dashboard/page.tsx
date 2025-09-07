@@ -1,16 +1,40 @@
 "use client";
 
+import { useSession, signIn, signOut } from "next-auth/react";
 import { motion } from "framer-motion";
-import { Rocket, Star, Moon, User, Calendar, Settings } from "lucide-react";
+import { Rocket, Star, User, Calendar, Settings } from "lucide-react";
 import Particles from "react-tsparticles";
-import { loadFull } from "tsparticles";
+import type { Engine } from "tsparticles-engine"; // ✅ Correct type
+import { loadFull } from "tsparticles";          // ✅ Correct import
 import { useCallback } from "react";
 
 export default function Dashboard() {
-  const particlesInit = useCallback(async (engine: any) => {
+  const { data: session, status } = useSession();
+
+  // ✅ Properly typed particlesInit
+  const particlesInit = useCallback(async (engine: Engine) => {
     await loadFull(engine);
   }, []);
 
+  if (status === "loading") {
+    return <p className="text-white text-center mt-20">Loading...</p>;
+  }
+
+  if (!session) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen text-white bg-black">
+        <h2 className="text-2xl mb-4">You must sign in to continue</h2>
+        <button
+          onClick={() => signIn("google")}
+          className="bg-purple-600 px-6 py-3 rounded-xl hover:bg-purple-700"
+        >
+          Sign in with Google
+        </button>
+      </div>
+    );
+  }
+
+  // ✅ Session is available → dashboard
   return (
     <div className="relative min-h-screen text-white overflow-hidden bg-black">
       {/* Background Stars */}
@@ -45,7 +69,10 @@ export default function Dashboard() {
           <a href="/profile" className="hover:text-purple-400">Profile</a>
           <a href="/settings" className="hover:text-purple-400">Settings</a>
         </div>
-        <button className="bg-purple-600 px-4 py-2 rounded-xl hover:bg-purple-700">
+        <button
+          onClick={() => signOut()}
+          className="bg-purple-600 px-4 py-2 rounded-xl hover:bg-purple-700"
+        >
           Logout
         </button>
       </nav>
@@ -75,8 +102,13 @@ export default function Dashboard() {
             animate={{ opacity: 1, y: 0 }}
             className="bg-black/40 p-6 rounded-2xl border border-gray-800"
           >
-            <h2 className="text-2xl font-bold mb-2">👨‍🚀 Welcome back, Astronaut!</h2>
+            <h2 className="text-2xl font-bold mb-2">
+              👨‍🚀 Welcome back, {session.user?.name || "Astronaut"}!
+            </h2>
             <p className="text-gray-400">Your mission control dashboard is ready.</p>
+            <p className="text-purple-400 mt-2">
+              College: {session.user?.college || "Unknown"}
+            </p>
           </motion.div>
 
           {/* Events */}
