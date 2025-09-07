@@ -4,22 +4,24 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import { motion } from "framer-motion";
 import { Rocket, Star, User, Calendar, Settings } from "lucide-react";
 import Particles from "react-tsparticles";
-import type { Engine } from "tsparticles-engine"; // ✅ Correct type
-import { loadFull } from "tsparticles";          // ✅ Correct import
+import type { Engine } from "tsparticles-engine";
+import { loadFull } from "tsparticles";
 import { useCallback } from "react";
 
 export default function Dashboard() {
   const { data: session, status } = useSession();
 
-  // ✅ Properly typed particlesInit
+  // ✅ Initialize particles properly
   const particlesInit = useCallback(async (engine: Engine) => {
     await loadFull(engine);
   }, []);
 
+  // ✅ Handle loading state
   if (status === "loading") {
     return <p className="text-white text-center mt-20">Loading...</p>;
   }
 
+  // ✅ Handle not signed in
   if (!session) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen text-white bg-black">
@@ -34,7 +36,7 @@ export default function Dashboard() {
     );
   }
 
-  // ✅ Session is available → dashboard
+  // ✅ Signed in → Dashboard
   return (
     <div className="relative min-h-screen text-white overflow-hidden bg-black">
       {/* Background Stars */}
@@ -87,10 +89,18 @@ export default function Dashboard() {
           className="col-span-2 bg-black/40 backdrop-blur-lg p-4 rounded-2xl border border-gray-800"
         >
           <ul className="space-y-6">
-            <li className="flex items-center gap-3 hover:text-purple-400"><Star /> Dashboard</li>
-            <li className="flex items-center gap-3 hover:text-purple-400"><Calendar /> Events</li>
-            <li className="flex items-center gap-3 hover:text-purple-400"><User /> Profile</li>
-            <li className="flex items-center gap-3 hover:text-purple-400"><Settings /> Settings</li>
+            <li className="flex items-center gap-3 hover:text-purple-400">
+              <Star /> Dashboard
+            </li>
+            <li className="flex items-center gap-3 hover:text-purple-400">
+              <Calendar /> Events
+            </li>
+            <li className="flex items-center gap-3 hover:text-purple-400">
+              <User /> Profile
+            </li>
+            <li className="flex items-center gap-3 hover:text-purple-400">
+              <Settings /> Settings
+            </li>
           </ul>
         </motion.aside>
 
@@ -100,18 +110,21 @@ export default function Dashboard() {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
             className="bg-black/40 p-6 rounded-2xl border border-gray-800"
           >
             <h2 className="text-2xl font-bold mb-2">
-              👨‍🚀 Welcome back, {session.user?.name || "Astronaut"}!
+              👨‍🚀 Welcome back, {session.user?.name ?? "Astronaut"}!
             </h2>
             <p className="text-gray-400">Your mission control dashboard is ready.</p>
-            <p className="text-purple-400 mt-2">
-              College: {session.user?.college || "Unknown"}
-            </p>
+            {session.user?.college && (
+              <p className="text-purple-400 mt-2">
+                College: {session.user.college}
+              </p>
+            )}
           </motion.div>
 
-          {/* Events */}
+          {/* Events Section */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -119,10 +132,16 @@ export default function Dashboard() {
             className="bg-black/40 p-6 rounded-2xl border border-gray-800"
           >
             <h2 className="text-xl font-bold mb-4">🚀 Upcoming Events</h2>
-            <div className="grid grid-cols-3 gap-4">
-              <div className="p-4 bg-purple-900/40 rounded-xl border border-purple-700">Hackathon - Oct 12</div>
-              <div className="p-4 bg-purple-900/40 rounded-xl border border-purple-700">Code Olympics - Oct 13</div>
-              <div className="p-4 bg-purple-900/40 rounded-xl border border-purple-700">AI Workshop - Oct 14</div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              <div className="p-4 bg-purple-900/40 rounded-xl border border-purple-700">
+                Hackathon - Oct 12
+              </div>
+              <div className="p-4 bg-purple-900/40 rounded-xl border border-purple-700">
+                Code Olympics - Oct 13
+              </div>
+              <div className="p-4 bg-purple-900/40 rounded-xl border border-purple-700">
+                AI Workshop - Oct 14
+              </div>
             </div>
           </motion.div>
         </div>
